@@ -12,57 +12,43 @@ class StudentsGrades:
 
     def get_grade(self, index):
         score = self.get_by_index(index)
-        if score < 50:
-            return "F"
-        elif 50 <= score < 60:
-            return "E"
-        elif 60 <= score < 70:
-            return "D"
-        elif 70 <= score < 80:
-            return "C"
-        elif 80 <= score < 90:
-            return "B"
-        elif 90 <= score <= 100:
-            return "A"
-    def find(self, score):
-        new_list = self.scores
-        counter_while = 0
-        while counter_while < len(new_list):
-            minimum_number = min(new_list[counter_while:])
-            for idx, i in enumerate(new_list[counter_while:]):
-                if i == minimum_number:
-                    real_idx = idx + counter_while
-                    new_list[counter_while], new_list[real_idx] = new_list[real_idx], new_list[counter_while]
-                    break
-            counter_while += 1
-        return new_list
+        if score < 50: return "F"
+        elif score < 60: return "E"
+        elif score < 70: return "D"
+        elif score < 80: return "C"
+        elif score < 90: return "B"
+        else: return "A"
+
+    def find(self, target_score):
+        # Najde indexy studentů, kteří mají daný počet bodů
+        found_indices = []
+        for idx, score in enumerate(self.scores):
+            if score == target_score:
+                found_indices.append(idx)
+        return found_indices
 
     def get_sorted(self):
-        new_list = self.scores
-        counter_while = 0
-        while counter_while < len(new_list):
-            swap_Bool = False
-            for idx in range(len(new_list) - 1 - counter_while):
-                if new_list[idx] > new_list[idx + 1]:
-                    new_list[idx], new_list[idx + 1] = new_list[idx + 1], new_list[idx]
-                    swap_Bool = True
-            if not swap_Bool:
-                break
-            counter_while += 1
+        # Používáme .copy(), aby se nezměnilo původní pole self.scores
+        new_list = self.scores.copy()
+        n = len(new_list)
+        for i in range(n):
+            for j in range(0, n - i - 1):
+                if new_list[j] > new_list[j + 1]:
+                    new_list[j], new_list[j + 1] = new_list[j + 1], new_list[j]
         return new_list
 
 def main():
     results = StudentsGrades([85, 42, 91, 67, 50, 73, 100, 38, 58])
-    print(results.count)
+    
+    # Opraveno results.count -> results.count()
+    print(f"Počet studentů: {results.count()}")
+    
     for student_id in range(results.count()):
-        print(f"Student {student_id}: {results.get_by_index(student_id)} points – {results.get_grade(student_id)}")
-    print(f"Plny počet měli studenti: {results.find(100)}")
-    print(f"seznam vysledky: {results.get_sorted()}")
-
-    random_results = StudentsGrades(random_numbers(30, 0, 100))
-    print(random_results.count())
-    print(random_results.get_sorted())
-
+        print(f"Student {student_id}: {results.get_by_index(student_id)} bodů – {results.get_grade(student_id)}")
+    
+    print(f"Indexy studentů s plným počtem (100): {results.find(100)}")
+    print(f"Seřazené výsledky: {results.get_sorted()}")
+    print(f"Původní seznam (beze změny): {results.scores}")
 
 if __name__ == "__main__":
     main()
