@@ -6,7 +6,8 @@ def random_numbers(count, low=0, high=100):
 
 
 def main():
-    print(random_numbers(10))
+    num = random_numbers(10)
+    print(f"Náhodná čísla: {num}")
 
 
 if __name__ == "__main__":
